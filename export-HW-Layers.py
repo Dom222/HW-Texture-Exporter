@@ -4,23 +4,54 @@ from gimpfu import *
 from os.path import join
 
 def export_HW_Layers(image, __unused_drawable, directory, name_pattern, include_underscore):
+    suffixes = [
+        "_DIFF",
+        "_SPEC",
+        "_GLOW",
+        "_NORM",
+        "_TEAM",
+        "_STRP",
+        "_PAIN",
+        "_REFL",
+        "_PROG", # Ore
+        "_DIFX", # Thruster
+        "_SPEX", # Thruster
+        "_GLOX", # Thruster
+        "_REFX", # Thruster
+        "_WARP", # Planet
+        "_CLD1", # Planet
+        "_CLD2", # Planet
+        "_CLD3", # Planet
+        "_PROG", # Cosmic
+        "_NOIZ"  # Dustvein
+    ]
     for layer in image.layers:
-        if include_underscore:
-            filename = directory + "\\" + name_pattern + "_" + layer.name + ".tga" #join(directory, name_pattern % layer.name)
-            raw_filename = name_pattern + "_" + layer.name + ".tga"
-        else:
-            filename = directory + "\\" + name_pattern + layer.name + ".tga" #join(directory, name_pattern % layer.name)
-            raw_filename = name_pattern + layer.name + ".tga"
-        rle = 0
-        origin = 0
-        pdb.file_tga_save(image, layer, filename, raw_filename, rle, origin)
+        for i in suffixes:
+            if i in layer.name:
+                if include_underscore:
+                    if ".tga" in layer.name or ".TGA" in layer.name:
+                        filename = directory + "\\" + name_pattern + "_" + layer.name #join(directory, name_pattern % layer.name)
+                        raw_filename = name_pattern + "_" + layer.name
+                    else:
+                        filename = directory + "\\" + name_pattern + "_" + layer.name + ".tga" #join(directory, name_pattern % layer.name)
+                        raw_filename = name_pattern + "_" + layer.name + ".tga"
+                else:
+                    if ".tga" in layer.name or ".TGA" in layer.name:
+                        filename = directory + "\\" + name_pattern + layer.name #join(directory, name_pattern % layer.name)
+                        raw_filename = name_pattern + layer.name
+                    else:
+                        filename = directory + "\\" + name_pattern + layer.name + ".tga" #join(directory, name_pattern % layer.name)
+                        raw_filename = name_pattern + layer.name + ".tga"
+                rle = 0
+                origin = 0
+                pdb.file_tga_save(image, layer, filename, raw_filename, rle, origin)
 
 register(
     "python_fu_export_HW_Layers",
     "Save all layers into separate files",
     "Save all layers into separate files",
-    "Xercodo",
-    "Xercodo",
+    "Xercodo & Dom2",
+    "Xercodo & Dom2",
     "2015",
     "<Image>/File/Export HW Maps...",
     "*",
